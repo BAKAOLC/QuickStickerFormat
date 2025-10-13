@@ -49,7 +49,7 @@
         </svg>
 
         <p class="text-sm text-gray-600">点击上传封面图片</p>
-        <p class="text-xs text-gray-500 mt-1">推荐 200x200 尺寸</p>
+        <p class="text-xs text-gray-500 mt-1">推荐 {{ coverImageSize }} 尺寸</p>
       </div>
     </div>
 
@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import FrameSelector from './FrameSelector.vue';
 
@@ -110,6 +110,12 @@ const fileInput = ref<HTMLInputElement>();
 const isDragOver = ref(false);
 const showFrameSelector = ref(false);
 const currentImage = ref<StickerImage>();
+
+const coverImageSize = computed(() => {
+  const width = store.currentFormat?.cover?.width ?? 200;
+  const height = store.currentFormat?.cover?.height ?? 200;
+  return `${width}x${height}`;
+});
 
 function triggerFileSelect(): void {
   fileInput.value?.click();

@@ -8,7 +8,12 @@
       <p class="text-sm text-gray-600 mt-1">{{ store.currentFormat?.description }}</p>
 
       <div class="mt-2 space-y-1 text-xs text-gray-500">
-        <div>数量要求：{{ store.currentFormat?.requirements.count }} 张</div>
+        <div>
+          数量要求：
+          <template v-if="allowVariable">{{ minCount }}~{{ maxCount }}</template>
+          <template v-else>{{ fixedCount }}</template>
+          张
+        </div>
       </div>
     </div>
 
@@ -97,6 +102,11 @@ const exportProgress = ref(0);
 const exportStatus = ref('');
 const exportError = ref<string | null>(null);
 
+const minCount = computed(() => store.currentFormat?.requirements.minCount ?? store.currentFormat?.requirements.count);
+const maxCount = computed(() => store.currentFormat?.requirements.maxCount ?? store.currentFormat?.requirements.count);
+const fixedCount = computed(() => store.currentFormat?.requirements.count);
+const allowVariable = computed(() => store.currentFormat?.requirements.allowVariable);
+
 // 计算封面状态
 const getCoverStatusText = computed(() => {
   const format = store.currentFormat;
@@ -125,8 +135,16 @@ const getCoverStatusClass = computed(() => {
 // 计算图片数量状态
 const getImageCountStatusText = computed(() => {
   const current = store.images.length;
-  const required = store.currentFormat?.requirements.count ?? 0;
-  return `${current} / ${required}`;
+  const format = store.currentFormat;
+  if (!format) return '';
+  const { allowVariable, minCount, maxCount, count } = format.requirements;
+  if (!allowVariable) {
+    return `${current}/${count}`;
+  }
+  const min = minCount ?? count;
+  const max = maxCount ?? count;
+  const status = `${current}/${min}~${max}`;
+  return status;
 });
 
 const getImageCountStatusClass = computed(() => {

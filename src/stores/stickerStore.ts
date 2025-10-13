@@ -58,6 +58,41 @@ export const useStickerStore = defineStore('sticker', () => {
         },
       },
     },
+    wx: {
+      id: 'wx',
+      name: '微信表情包',
+      description: '微信平台专用格式，支持 8-24 张表情',
+      requirements: {
+        count: 24,
+        minCount: 8,
+        maxCount: 24,
+        allowVariable: true,
+        coverRequired: true,
+      },
+      outputs: [
+        {
+          id: 'stickers',
+          name: '表情包',
+          width: 240,
+          height: 240,
+          format: 'gif',
+          filename: '{index:02d}.gif',
+          zipFilename: 'stickers.zip',
+        },
+      ],
+      cover: {
+        width: 240,
+        height: 240,
+        format: 'png',
+        filename: 'cover.png',
+      },
+      validation: {
+        nameValidation: {
+          maxLength: 8,
+          allowedChars: /^[\u4e00-\u9fa5a-zA-Z0-9]+$/,
+        },
+      },
+    },
   });
 
   // Computed
