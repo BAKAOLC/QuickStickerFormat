@@ -75,6 +75,7 @@ async function onFileSelect(event: Event): Promise<void> {
   const target = event.target as HTMLInputElement;
   if (target.files) {
     await handleFiles(Array.from(target.files));
+    target.value = '';
   }
 }
 
