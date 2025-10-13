@@ -253,8 +253,6 @@ function openFrameSelector(image: StickerImage): void {
 
 function handleFrameSelect(frameIndex: number): void {
   if (currentImage.value) {
-    store.updateImageFrame(currentImage.value.id, frameIndex);
-    // 选择帧后，使用该帧生成封面
     generateCoverFromFrame(currentImage.value, frameIndex);
   }
   showFrameSelector.value = false;
