@@ -43,6 +43,14 @@
 
   /* 表情包列表样式 */
   .image-card {
+    max-width: 150px;
+    width: 100%;
+  }
+  .image-preview {
+    max-width: 150px;
+    width: 100%;
+  }
+  .image-card {
     @apply relative bg-white border-2 border-gray-200 rounded-lg overflow-hidden 
            hover:border-blue-400 transition-colors h-auto max-h-[260px];
   }

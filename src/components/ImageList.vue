@@ -21,7 +21,7 @@
         v-model="localImages"
         item-key="id"
         handle=".drag-handle"
-        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 content-start"
+        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 gap-3 content-start"
         @end="onDragEnd"
       >
       <template #item="{ element }">
