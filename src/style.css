@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Helvetica,
+      Arial, sans-serif;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+  }
+
+  /* 自定义下拉选择器样式 */
+  .custom-select-button {
+    @apply relative w-full bg-white border border-gray-300 rounded-lg shadow-sm pl-4 pr-10 py-2 
+           text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 
+           focus:border-blue-500 hover:border-gray-400 transition-colors duration-200 min-w-[180px];
+  }
+
+  .custom-select-button.active {
+    @apply ring-2 ring-blue-500 border-blue-500;
+  }
+
+  /* 表情包列表样式 */
+  .image-card {
+    @apply relative bg-white border-2 border-gray-200 rounded-lg overflow-hidden 
+           hover:border-blue-400 transition-colors h-auto max-h-[260px];
+  }
+
+  .drag-handle {
+    @apply bg-blue-600 text-white text-xs font-bold py-1.5 text-center cursor-grab 
+           hover:bg-blue-700 transition-colors z-10 rounded-t-md;
+  }
+
+  .drag-handle:active {
+    @apply cursor-grabbing;
+  }
+
+  .image-preview-container {
+    @apply flex-1;
+  }
+
+  .image-preview {
+    @apply aspect-square bg-gray-100 flex items-center justify-center relative
+           h-auto max-h-[180px];
+  }
+
+  .delete-overlay {
+    @apply absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center
+           opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10;
+  }
+
+  .delete-button-center {
+    @apply w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center
+           transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg;
+  }
+
+  .delete-icon {
+    @apply text-white text-xl font-bold leading-none select-none;
+  }
+
+  .image-controls {
+    @apply p-1.5 border-t space-y-1.5;
+  }
+
+  .image-name-input {
+    @apply w-full text-xs border border-gray-300 rounded px-1.5 py-1 
+           focus:outline-none focus:border-blue-500;
+  }
+
+  .frame-selector {
+    @apply flex items-center space-x-1.5;
+  }
+
+  .frame-selector-select {
+    @apply text-xs border border-gray-300 rounded px-1.5 py-0.5 
+           focus:outline-none focus:border-blue-500 flex-1 text-center;
+  }
+
+  /* 上传区域样式 */
+  .upload-area {
+    @apply border-2 border-dashed border-gray-300 rounded-lg p-8 text-center 
+           transition-colors cursor-pointer hover:border-gray-400;
+  }
+
+  .upload-area.drag-over {
+    @apply border-blue-400 bg-blue-50;
+  }
+
+  /* 输入框样式 */
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 
+           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  }
+}
