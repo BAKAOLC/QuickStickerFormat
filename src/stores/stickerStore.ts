@@ -11,6 +11,17 @@ export const useStickerStore = defineStore('sticker', () => {
   const settings = ref<AppSettings>({
     selectedFormat: 'qq',
   });
+    // 检查重名，返回重复名称的id数组
+  const duplicateNames = computed(() => {
+    const nameCount: Record<string, number> = {};
+    images.value.forEach(img => {
+      nameCount[img.name] = (nameCount[img.name] ?? 0) + 1;
+    });
+    // 找出重复的名称
+    const duplicates = Object.keys(nameCount).filter(name => nameCount[name] > 1);
+    // 返回所有重复名称的id数组
+    return images.value.filter(img => duplicates.includes(img.name)).map(img => img.id);
+  });
 
   // Export formats
   const exportFormats = ref<Record<string, ExportFormat>>({
@@ -221,6 +232,7 @@ export const useStickerStore = defineStore('sticker', () => {
     currentFormat,
     isValidImageCount,
     canExport,
+    duplicateNames,
 
     // Actions
     addImages,

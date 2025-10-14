@@ -39,6 +39,13 @@
       </div>
     </div>
 
+    <!-- 重名警告 -->
+    <div
+      v-if="store.duplicateNames.length > 0"
+      class="mb-4 p-2 bg-yellow-50 border border-yellow-300 rounded text-yellow-800 text-sm"
+    >
+      <strong>警告：</strong> 存在重名表情，导出时可能导致文件覆盖，请修改表情名称。
+    </div>
     <!-- 导出按钮 -->
     <button
       type="button"

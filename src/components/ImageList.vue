@@ -25,7 +25,7 @@
         @end="onDragEnd"
       >
       <template #item="{ element }">
-        <div class="image-card group">
+  <div class="image-card group" :class="{ 'border-2 border-yellow-500': store.duplicateNames.includes(element.id) }">
           <!-- 序号拖拽手柄 - 独立在外面 -->
           <div class="drag-handle">
             {{ element.order + 1 }}
