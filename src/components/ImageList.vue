@@ -1,9 +1,66 @@
 <template>
   <div class="card">
-    <h2 class="text-lg font-medium text-gray-900 mb-4">表情包列表</h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-medium text-gray-900">表情包列表</h2>
+      <div class="flex items-center gap-2">
+        <button
+          v-if="store.images.length > 0"
+          type="button"
+          class="btn-danger text-sm"
+          @click="clearAll"
+        >
+          清空所有
+        </button>
+        <button
+          type="button"
+          class="btn-primary text-sm"
+          @click="triggerFileSelect"
+        >
+          上传表情包
+        </button>
+      </div>
+    </div>
 
     <!-- 表情包网格或空状态提示 -->
-    <div class="h-96 overflow-y-auto bg-gray-50">
+    <div
+      ref="listContainer"
+      class="h-96 overflow-y-auto bg-gray-50 relative"
+      @drop="onDrop"
+      @dragover.prevent
+      @dragenter.prevent="handleDragEnter"
+      @dragleave.prevent="handleDragLeave"
+    >
+      <!-- 拖拽上传覆盖层 -->
+      <div
+        v-if="isDragOver"
+        class="absolute inset-0 z-50 bg-blue-50 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center"
+      >
+        <div class="text-center space-y-2">
+          <svg class="mx-auto h-12 w-12 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <div class="text-sm font-medium text-blue-600">
+            松开鼠标上传图片
+          </div>
+          <p class="text-xs text-gray-500">
+            支持 PNG, JPG, GIF 格式，推荐使用动态 GIF
+          </p>
+        </div>
+      </div>
+
+      <input
+        ref="fileInput"
+        type="file"
+        multiple
+        accept="image/*,.gif"
+        class="hidden"
+        @change="onFileSelect"
+      >
       <!-- 空状态提示 -->
       <div
         v-if="store.images.length === 0"
@@ -13,7 +70,7 @@
           <span class="text-gray-400 text-xl">📷</span>
         </div>
         <p class="text-sm font-medium text-gray-600">还没有上传表情包</p>
-        <p class="text-xs text-gray-400 mt-1">请在下方上传区域添加图片</p>
+        <p class="text-xs text-gray-400 mt-1">点击上方按钮或拖拽图片到此处上传</p>
       </div>
 
       <!-- 表情包网格 -->
@@ -107,6 +164,11 @@ import { ImageProcessor } from '@/utils/imageProcessor';
 
 const store = useStickerStore();
 
+// 上传相关状态
+const fileInput = ref<HTMLInputElement>();
+const listContainer = ref<HTMLElement>();
+const isDragOver = ref(false);
+
 // 帧选择相关状态
 const showFrameSelector = ref(false);
 const selectedImageForFrames = ref<StickerImage | null>(null);
@@ -160,5 +222,62 @@ function confirmFrameSelection(frameIndex: number): void {
     store.updateImageFrame(selectedImageForFrames.value.id, frameIndex);
   }
   closeFrameSelector();
+}
+
+// 上传相关函数
+function triggerFileSelect(): void {
+  fileInput.value?.click();
+}
+
+async function onFileSelect(event: Event): Promise<void> {
+  const target = event.target as HTMLInputElement;
+  if (target.files) {
+    await handleFiles(Array.from(target.files));
+    target.value = '';
+  }
+}
+
+function handleDragEnter(event: DragEvent): void {
+  event.preventDefault();
+  if (event.dataTransfer?.types.includes('Files')) {
+    isDragOver.value = true;
+  }
+}
+
+function handleDragLeave(event: DragEvent): void {
+  event.preventDefault();
+  // 只有当离开的是容器本身时才隐藏覆盖层（避免子元素触发）
+  const relatedTarget = event.relatedTarget as HTMLElement | null;
+  if (!listContainer.value?.contains(relatedTarget)) {
+    isDragOver.value = false;
+  }
+}
+
+async function onDrop(event: DragEvent): Promise<void> {
+  event.preventDefault();
+  isDragOver.value = false;
+
+  if (event.dataTransfer?.files) {
+    await handleFiles(Array.from(event.dataTransfer.files));
+  }
+}
+
+async function handleFiles(files: File[]): Promise<void> {
+  // 过滤图片文件
+  const imageFiles = files.filter(file => file.type.startsWith('image/') || file.name.toLowerCase().endsWith('.gif'));
+
+  if (imageFiles.length === 0) {
+    console.warn('请选择有效的图片文件');
+    return;
+  }
+
+  await store.addImages(imageFiles);
+}
+
+function clearAll(): void {
+  // eslint-disable-next-line no-alert
+  if (confirm('确定要清空所有图片吗？')) {
+    store.clearAll();
+  }
 }
 </script>

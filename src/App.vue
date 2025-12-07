@@ -24,9 +24,6 @@
         <div class="lg:col-span-2 space-y-6">
           <!-- 表情包列表 -->
           <ImageList />
-
-          <!-- 图片上传区域 -->
-          <ImageUpload />
         </div>
 
         <!-- 右侧：封面和导出 -->
@@ -47,7 +44,6 @@ import CoverUpload from '@/components/CoverUpload.vue';
 import CustomSelect from '@/components/CustomSelect.vue';
 import ExportPanel from '@/components/ExportPanel.vue';
 import ImageList from '@/components/ImageList.vue';
-import ImageUpload from '@/components/ImageUpload.vue';
 import { useStickerStore } from '@/stores/stickerStore';
 
 const store = useStickerStore();
